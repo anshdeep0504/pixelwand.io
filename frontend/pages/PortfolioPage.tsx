@@ -195,8 +195,10 @@ const PortfolioPage: React.FC = () => {
           </div>
         )}
       </div>
-      <div className="lg:col-span-1">
-        <Chatbot portfolio={portfolio} />
+      <div className="lg:col-span-1 flex flex-col">
+        <div className="w-full max-w-md mx-auto lg:sticky lg:top-8">
+          <Chatbot portfolio={portfolio} />
+        </div>
       </div>
     </div>
   );

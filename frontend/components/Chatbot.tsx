@@ -63,7 +63,22 @@ const Chatbot: React.FC<{ portfolio: Portfolio }> = ({ portfolio }) => {
       const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY as string });
       
       const holdingsString = portfolio.holdings.map(h => `${h.quantity} shares of ${h.ticker} (${h.companyName}) at $${h.price.toFixed(2)} each`).join(', ');
-      const systemInstruction = `You are a helpful portfolio assistant for ValueMetrix. Analyze the provided portfolio and offer actionable, educational, or general investment advice based on the data. You may comment on diversification, risk, sector exposure, and suggest improvements, but do not give personalized or regulated financial advice. ALWAYS answer in a single, concise sentence (one-liner) for every user question, no matter how complex.\n\nHere is the portfolio data:\n- Total Value: $${portfolio.totalValue.toFixed(2)}\n- Cash Balance: $${portfolio.cash.toFixed(2)}\n- Holdings: ${holdingsString}\n- AI-Generated Thesis: ${portfolio.aiInsights.investmentThesis}\n- AI-Generated Summary: ${portfolio.aiInsights.summary}\n\nAnswer questions based ONLY on this context.`;
+      const systemInstruction = `
+You are a helpful portfolio assistant for ValueMetrix. 
+ALWAYS answer in a single, concise sentence (one-liner) for every user question, no matter how complex.
+Never use more than one sentence. Never use a paragraph. Never use a list. Never use more than 20 words.
+If the answer cannot fit in one sentence, summarize it in one sentence anyway.
+Do not give personalized or regulated financial advice.
+
+Here is the portfolio data:
+- Total Value: $${portfolio.totalValue.toFixed(2)}
+- Cash Balance: $${portfolio.cash.toFixed(2)}
+- Holdings: ${holdingsString}
+- AI-Generated Thesis: ${portfolio.aiInsights.investmentThesis}
+- AI-Generated Summary: ${portfolio.aiInsights.summary}
+
+Answer questions based ONLY on this context.
+`;
 
       chatRef.current = ai.chats.create({
         model: 'gemini-2.5-flash',
